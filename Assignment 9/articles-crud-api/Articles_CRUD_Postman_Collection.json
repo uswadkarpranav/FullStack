@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "Articles CRUD REST API - Assignment 9",
+    "description": "Postman Collection for Articles CRUD API following the exact instructed tutorial.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get All Articles (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3000/articles", "host": ["http://localhost:3000"], "path": ["articles"] }
+      }
+    },
+    {
+      "name": "2. Create Article (POST)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Understanding HTTP Methods\",\n    \"content\": \"HTTP methods define the operations that can be performed on resources.\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/articles", "host": ["http://localhost:3000"], "path": ["articles"] }
+      }
+    },
+    {
+      "name": "3. Get Single Article (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3000/articles/1", "host": ["http://localhost:3000"], "path": ["articles", "1"] }
+      }
+    },
+    {
+      "name": "4. Update Article Completely (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"REST API Fundamentals\",\n    \"content\": \"REST APIs use HTTP methods to perform operations on resources.\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/articles/1", "host": ["http://localhost:3000"], "path": ["articles", "1"] }
+      }
+    },
+    {
+      "name": "5. Update Article Partially (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"REST API Fundamentals\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/articles/1", "host": ["http://localhost:3000"], "path": ["articles", "1"] }
+      }
+    },
+    {
+      "name": "6. Delete Article (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "http://localhost:3000/articles/2", "host": ["http://localhost:3000"], "path": ["articles", "2"] }
+      }
+    }
+  ]
+}

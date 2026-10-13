@@ -1,0 +1,179 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #263247;
+    line-height: 1.6;
+}
+
+header {
+    background: #17365d;
+    color: white;
+    text-align: center;
+    padding: 28px 16px;
+}
+
+header h1 {
+    margin-bottom: 6px;
+}
+
+main {
+    width: 92%;
+    max-width: 1100px;
+    margin: 28px auto;
+}
+
+section {
+    background: white;
+    padding: 22px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+h2 {
+    margin-bottom: 16px;
+    color: #17365d;
+}
+
+h3 {
+    margin: 16px 0 10px;
+}
+
+.form-grid,
+.marks-grid,
+.summary {
+    display: grid;
+    gap: 16px;
+}
+
+.form-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.marks-grid {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: 2px solid #8bb7ed;
+    border-color: #2563eb;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #174bb5;
+}
+
+.summary {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.summary-card {
+    padding: 20px;
+    text-align: center;
+    background: #eaf1fc;
+    border-radius: 8px;
+}
+
+.summary-card p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #17365d;
+}
+
+.topper-section {
+    border-left: 5px solid #e5a000;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+th {
+    background: #17365d;
+    color: white;
+}
+
+tbody tr:hover {
+    background: #f1f5f9;
+}
+
+.delete-btn {
+    margin: 0;
+    padding: 7px 12px;
+    background: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #991b1b;
+}
+
+footer {
+    text-align: center;
+    background: #17365d;
+    color: white;
+    padding: 18px;
+    margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .marks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+}

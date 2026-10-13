@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Hospital Management System REST API - Assignment 9",
+    "description": "Postman Collection for Hospital Management System CRUD endpoints (POST, GET, PUT, PATCH, DELETE).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Admit Patient (POST)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Suresh Raina\",\n  \"age\": 38,\n  \"gender\": \"Male\",\n  \"phone\": \"9876543211\",\n  \"disease\": \"Knee Ligament Tear\",\n  \"department\": \"Orthopedics\",\n  \"doctor\": \"Dr. Sunil Rao\",\n  \"roomNumber\": \"O-215\",\n  \"status\": \"Admitted\"\n}"
+        },
+        "url": { "raw": "http://localhost:4000/api/patients", "host": ["http://localhost:4000"], "path": ["api", "patients"] }
+      }
+    },
+    {
+      "name": "2. Get All Patients (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:4000/api/patients", "host": ["http://localhost:4000"], "path": ["api", "patients"] }
+      }
+    },
+    {
+      "name": "3. Get Patient by ID (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:4000/api/patients/1", "host": ["http://localhost:4000"], "path": ["api", "patients", "1"] }
+      }
+    },
+    {
+      "name": "4. Filter Patients by Department (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:4000/api/patients?department=Cardiology", "host": ["http://localhost:4000"], "path": ["api", "patients"], "query": [{"key": "department", "value": "Cardiology"}] }
+      }
+    },
+    {
+      "name": "5. Update Patient Completely (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Aarav Patel\",\n  \"age\": 35,\n  \"gender\": \"Male\",\n  \"disease\": \"Controlled Hypertension\",\n  \"department\": \"Cardiology\",\n  \"doctor\": \"Dr. Rajesh Mehta\",\n  \"roomNumber\": \"C-104\",\n  \"status\": \"Discharged\"\n}"
+        },
+        "url": { "raw": "http://localhost:4000/api/patients/1", "host": ["http://localhost:4000"], "path": ["api", "patients", "1"] }
+      }
+    },
+    {
+      "name": "6. Partially Update Patient Status (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Discharged\",\n  \"roomNumber\": \"N/A\"\n}"
+        },
+        "url": { "raw": "http://localhost:4000/api/patients/2", "host": ["http://localhost:4000"], "path": ["api", "patients", "2"] }
+      }
+    },
+    {
+      "name": "7. Discharge and Remove Patient (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "http://localhost:4000/api/patients/3", "host": ["http://localhost:4000"], "path": ["api", "patients", "3"] }
+      }
+    },
+    {
+      "name": "8. Get Hospital Stats (GET)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:4000/api/stats", "host": ["http://localhost:4000"], "path": ["api", "stats"] }
+      }
+    }
+  ]
+}

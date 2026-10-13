@@ -1,0 +1,139 @@
+{
+  "info": {
+    "_postman_id": "c1f7a46e-1d54-4a2b-9876-student-crud-001",
+    "name": "Assignment 8 - Student Records CRUD API",
+    "description": "Postman Collection to test all CRUD API endpoints for Assignment 8 (Node.js + Express.js + MongoDB).\n\nEndpoints:\n1. POST   /api/students - Create a new student\n2. GET    /api/students - Read all students\n3. GET    /api/students/:id - Read single student by ID\n4. PUT    /api/students/:id - Update student by ID\n5. DELETE /api/students/:id - Delete student by ID",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "studentId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Root Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        },
+        "description": "Checks if the server is up and returns the API overview."
+      },
+      "response": []
+    },
+    {
+      "name": "1. Create Student (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.success && jsonData.data && jsonData.data._id) {",
+              "    pm.collectionVariables.set('studentId', jsonData.data._id);",
+              "    console.log('Saved studentId to collection variable:', jsonData.data._id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rollNo\": \"CS101\",\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"course\": \"Computer Science\",\n  \"age\": 21,\n  \"grade\": \"A\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/students",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "students"]
+        },
+        "description": "Creates a new student record in MongoDB. Saves the generated _id into {{studentId}} variable."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get All Students (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/students",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "students"]
+        },
+        "description": "Fetches an array of all students stored in MongoDB."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Student By ID (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/students/{{studentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "students", "{{studentId}}"]
+        },
+        "description": "Fetches a single student using the MongoDB _id."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update Student By ID (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Johnathan Doe\",\n  \"age\": 22,\n  \"grade\": \"A+\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/students/{{studentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "students", "{{studentId}}"]
+        },
+        "description": "Updates fields of an existing student using their _id."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Delete Student By ID (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/students/{{studentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "students", "{{studentId}}"]
+        },
+        "description": "Deletes a student record from MongoDB using their _id."
+      },
+      "response": []
+    }
+  ]
+}

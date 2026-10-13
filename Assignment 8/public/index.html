@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records Management System - Assignment 8</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-cloud {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 860px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-cancel {
+            background-color: #94a3b8;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .btn-cancel:hover {
+            background-color: #64748b;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.65rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: #e0e7ff;
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background: #c7d2fe;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: #fecaca;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+
+        .tag-grade {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            background: #ecfdf5;
+            color: var(--success);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Student Records Management System</h1>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Assignment 8: Node.js • Express.js • MongoDB Atlas • REST API</p>
+            <span class="badge-cloud">Connected to MongoDB Atlas Cloud</span>
+        </header>
+
+        <div id="alertBox" class="alert"></div>
+
+        <div class="grid">
+            <!-- Left: Student Form (Create / Update) -->
+            <div class="card">
+                <h2 id="formTitle">➕ Add New Student</h2>
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    
+                    <div class="form-group">
+                        <label for="rollNo">Roll Number *</label>
+                        <input type="text" id="rollNo" placeholder="e.g. CS101" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" placeholder="e.g. Pranav Sharma" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" placeholder="e.g. student@college.edu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="course">Course / Department *</label>
+                        <input type="text" id="course" placeholder="e.g. Computer Science" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" min="1" max="100" placeholder="e.g. 21" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="grade">Grade</label>
+                        <select id="grade">
+                            <option value="A+">A+</option>
+                            <option value="A" selected>A</option>
+                            <option value="B+">B+</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn">Add Student</button>
+                    <button type="button" id="cancelBtn" class="btn btn-cancel" onclick="resetForm()">Cancel Edit</button>
+                </form>
+            </div>
+
+            <!-- Right: Live Students Table -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>📋 Registered Students (<span id="count">0</span>)</h2>
+                    <button class="btn-sm btn-edit" onclick="fetchStudents()">🔄 Refresh</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Age</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Loading students...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/students';
+
+        // Fetch students on page load
+        window.addEventListener('DOMContentLoaded', fetchStudents);
+
+        function showAlert(message, type = 'success') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.textContent = message;
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 4000);
+        }
+
+        // 1. READ: Fetch all students from backend
+        async function fetchStudents() {
+            try {
+                const res = await fetch(API_URL);
+                const result = await res.json();
+
+                const tbody = document.getElementById('studentTableBody');
+                const countBadge = document.getElementById('count');
+
+                if (!result.success || !result.data || result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No students found. Add one on the left!</td></tr>';
+                    countBadge.textContent = '0';
+                    return;
+                }
+
+                countBadge.textContent = result.data.length;
+                tbody.innerHTML = result.data.map(student => `
+                    <tr>
+                        <td><strong>${escapeHtml(student.rollNo)}</strong></td>
+                        <td>${escapeHtml(student.name)}</td>
+                        <td>${escapeHtml(student.email)}</td>
+                        <td>${escapeHtml(student.course)}</td>
+                        <td>${student.age}</td>
+                        <td><span class="tag-grade">${escapeHtml(student.grade || 'A')}</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn-sm btn-edit" onclick="startEdit('${student._id}', '${escapeAttr(student.rollNo)}', '${escapeAttr(student.name)}', '${escapeAttr(student.email)}', '${escapeAttr(student.course)}', ${student.age}, '${escapeAttr(student.grade)}')">Edit</button>
+                                <button class="btn-sm btn-delete" onclick="deleteStudent('${student._id}', '${escapeAttr(student.name)}')">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error(err);
+                showAlert('Failed to connect to backend API: ' + err.message, 'error');
+            }
+        }
+
+        // 2. CREATE or UPDATE student
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const isEditing = Boolean(studentId);
+
+            const payload = {
+                rollNo: document.getElementById('rollNo').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                course: document.getElementById('course').value.trim(),
+                age: Number(document.getElementById('age').value),
+                grade: document.getElementById('grade').value
+            };
+
+            const url = isEditing ? `${API_URL}/${studentId}` : API_URL;
+            const method = isEditing ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || 'Error occurred');
+                }
+
+                showAlert(data.message || (isEditing ? 'Student updated successfully!' : 'Student created successfully!'));
+                resetForm();
+                fetchStudents();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            }
+        });
+
+        // 3. Populate form for EDIT (PUT)
+        function startEdit(id, rollNo, name, email, course, age, grade) {
+            document.getElementById('studentId').value = id;
+            document.getElementById('rollNo').value = rollNo;
+            document.getElementById('rollNo').disabled = true; // Roll number is unique identifier
+            document.getElementById('name').value = name;
+            document.getElementById('email').value = email;
+            document.getElementById('course').value = course;
+            document.getElementById('age').value = age;
+            document.getElementById('grade').value = grade || 'A';
+
+            document.getElementById('formTitle').textContent = '✏️ Edit Student';
+            document.getElementById('submitBtn').textContent = 'Update Student';
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+        }
+
+        // Reset form to Add mode
+        function resetForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('rollNo').disabled = false;
+            document.getElementById('formTitle').textContent = '➕ Add New Student';
+            document.getElementById('submitBtn').textContent = 'Add Student';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        // 4. DELETE student
+        async function deleteStudent(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to delete');
+                }
+
+                showAlert('Student record deleted successfully!');
+                fetchStudents();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function escapeAttr(text) {
+            if (!text) return '';
+            return text.toString().replace(/'/g, "\\'");
+        }
+    </script>
+</body>
+</html>

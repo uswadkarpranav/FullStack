@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Care Hospital - Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --admitted: #10b981;
+            --discharged: #64748b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+            color: var(--text-main);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 950px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.85rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-cancel {
+            background: #94a3b8;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            width: auto;
+            min-width: 150px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            padding: 0.65rem 0.75rem;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-admitted {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-discharged {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .btn-action {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-edit { background: #e0f2fe; color: #0369a1; }
+        .btn-toggle { background: #fef3c7; color: #92400e; }
+        .btn-delete { background: #fee2e2; color: #b91c1c; }
+
+        .alert {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+            font-size: 0.85rem;
+        }
+        .alert-success { background: #d1fae5; color: #065f46; display: block; }
+        .alert-error { background: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>🏥 City Care Hospital Management System</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Assignment 9: Mini Project • Express.js REST API (Full CRUD + PATCH)</p>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+                Server Port: <strong>4000</strong>
+            </div>
+        </header>
+
+        <div id="alertBox" class="alert"></div>
+
+        <!-- Real-time Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">Total Patients</div>
+                <div class="value" id="statTotal">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Currently Admitted</div>
+                <div class="value" style="color: #16a34a;" id="statAdmitted">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Discharged</div>
+                <div class="value" style="color: #64748b;" id="statDischarged">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Available Doctors</div>
+                <div class="value" style="color: #0284c7;" id="statDoctors">5</div>
+            </div>
+        </div>
+
+        <div class="layout">
+            <!-- Left: Admit Patient Form -->
+            <div class="card">
+                <h2 id="formTitle">➕ Admit New Patient (POST)</h2>
+                <form id="patientForm">
+                    <input type="hidden" id="patientId">
+
+                    <div class="form-group">
+                        <label>Patient Full Name *</label>
+                        <input type="text" id="name" placeholder="e.g. Aarav Patel" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Age *</label>
+                            <input type="number" id="age" min="1" max="120" placeholder="e.g. 34" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender *</label>
+                            <select id="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="phone" placeholder="10-digit phone">
+                        </div>
+                        <div class="form-group">
+                            <label>Room / Ward</label>
+                            <input type="text" id="roomNumber" placeholder="e.g. C-104">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Diagnosed Disease / Issue *</label>
+                        <input type="text" id="disease" placeholder="e.g. Hypertension" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Department *</label>
+                            <select id="department" required>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="General Surgery">General Surgery</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Neurology">Neurology</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned Doctor</label>
+                            <select id="doctor">
+                                <option value="Dr. Rajesh Mehta">Dr. Rajesh Mehta</option>
+                                <option value="Dr. Ananya Roy">Dr. Ananya Roy</option>
+                                <option value="Dr. Sunil Rao">Dr. Sunil Rao</option>
+                                <option value="Dr. Priya Verma">Dr. Priya Verma</option>
+                                <option value="Dr. Rohan Kulkarni">Dr. Rohan Kulkarni</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="Admitted" selected>Admitted</option>
+                            <option value="Discharged">Discharged</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn">Admit Patient</button>
+                    <button type="button" id="cancelBtn" class="btn btn-cancel" onclick="resetForm()">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Right: Patient Directory Table -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h2>📋 Patient Directory (GET)</h2>
+                    <button class="btn-action btn-edit" onclick="loadPatients()">🔄 Refresh</button>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="filterStatus" onchange="loadPatients()">
+                        <option value="">All Statuses</option>
+                        <option value="Admitted">Admitted Only</option>
+                        <option value="Discharged">Discharged Only</option>
+                    </select>
+                    <select id="filterDept" onchange="loadPatients()">
+                        <option value="">All Departments</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="General Surgery">General Surgery</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Neurology">Neurology</option>
+                    </select>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Patient</th>
+                                <th>Disease</th>
+                                <th>Dept / Doctor</th>
+                                <th>Room</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientTableBody">
+                            <tr><td colspan="7" style="text-align:center; padding: 2rem;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/patients';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPatients();
+            loadStats();
+        });
+
+        function showAlert(msg, type = 'success') {
+            const box = document.getElementById('alertBox');
+            box.className = `alert alert-${type}`;
+            box.textContent = msg;
+            setTimeout(() => box.style.display = 'none', 3500);
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statTotal').textContent = data.data.totalPatients;
+                    document.getElementById('statAdmitted').textContent = data.data.admitted;
+                    document.getElementById('statDischarged').textContent = data.data.discharged;
+                    document.getElementById('statDoctors').textContent = data.data.totalDoctors;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadPatients() {
+            const status = document.getElementById('filterStatus').value;
+            const dept = document.getElementById('filterDept').value;
+            let url = API_URL + '?';
+            if (status) url += `status=${encodeURIComponent(status)}&`;
+            if (dept) url += `department=${encodeURIComponent(dept)}&`;
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+                const tbody = document.getElementById('patientTableBody');
+
+                if (!result.data || result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #94a3b8;">No patients found matching filter.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map(p => `
+                    <tr>
+                        <td>#${p.id}</td>
+                        <td>
+                            <strong>${p.name}</strong><br>
+                            <span style="color:#64748b; font-size: 0.75rem;">${p.age} yrs • ${p.gender}</span>
+                        </td>
+                        <td>${p.disease}</td>
+                        <td>
+                            ${p.department}<br>
+                            <span style="color:#64748b; font-size: 0.75rem;">${p.doctor}</span>
+                        </td>
+                        <td>${p.roomNumber}</td>
+                        <td>
+                            <span class="badge badge-${p.status.toLowerCase()}">${p.status}</span>
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="btn-action btn-edit" title="Full Update (PUT)" onclick="startEdit(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
+                                <button class="btn-action btn-toggle" title="Toggle Status (PATCH)" onclick="toggleStatus(${p.id}, '${p.status}')">${p.status === 'Admitted' ? 'Discharge' : 'Re-admit'}</button>
+                                <button class="btn-action btn-delete" title="Delete (DELETE)" onclick="deletePatient(${p.id}, '${p.name}')">Del</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                loadStats();
+            } catch (err) {
+                showAlert('Failed to load patients: ' + err.message, 'error');
+            }
+        }
+
+        document.getElementById('patientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('patientId').value;
+            const isEdit = Boolean(id);
+
+            const payload = {
+                name: document.getElementById('name').value.trim(),
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                phone: document.getElementById('phone').value.trim(),
+                roomNumber: document.getElementById('roomNumber').value.trim(),
+                disease: document.getElementById('disease').value.trim(),
+                department: document.getElementById('department').value,
+                doctor: document.getElementById('doctor').value,
+                status: document.getElementById('status').value
+            };
+
+            const url = isEdit ? `${API_URL}/${id}` : API_URL;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Operation failed');
+
+                showAlert(data.message || 'Saved successfully!');
+                resetForm();
+                loadPatients();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            }
+        });
+
+        function startEdit(p) {
+            document.getElementById('patientId').value = p.id;
+            document.getElementById('name').value = p.name;
+            document.getElementById('age').value = p.age;
+            document.getElementById('gender').value = p.gender;
+            document.getElementById('phone').value = p.phone || '';
+            document.getElementById('roomNumber').value = p.roomNumber || '';
+            document.getElementById('disease').value = p.disease;
+            document.getElementById('department').value = p.department;
+            document.getElementById('doctor').value = p.doctor;
+            document.getElementById('status').value = p.status;
+
+            document.getElementById('formTitle').textContent = `✏️ Edit Patient #${p.id} (PUT)`;
+            document.getElementById('submitBtn').textContent = 'Update Patient';
+            document.getElementById('cancelBtn').style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('patientForm').reset();
+            document.getElementById('patientId').value = '';
+            document.getElementById('formTitle').textContent = '➕ Admit New Patient (POST)';
+            document.getElementById('submitBtn').textContent = 'Admit Patient';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        // PATCH: Partially update status
+        async function toggleStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'Admitted' ? 'Discharged' : 'Admitted';
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+                showAlert(`Status changed to ${newStatus} (via PATCH)!`);
+                loadPatients();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            }
+        }
+
+        // DELETE: Delete patient
+        async function deletePatient(id, name) {
+            if (!confirm(`Are you sure you want to remove record for ${name}?`)) return;
+            try {
+                const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+                showAlert(data.message);
+                loadPatients();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
